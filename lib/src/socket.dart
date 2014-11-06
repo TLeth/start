@@ -2,9 +2,9 @@ part of start;
 
 class Socket implements SocketBase {
   final WebSocket _ws;
-  final _messageController = new StreamController(),
-        _openController = new StreamController(),
-        _closeController = new StreamController();
+  final _messageController = new StreamController();
+  final _openController = new StreamController();
+  final _closeController = new StreamController();
 
   Stream _messages;
 
@@ -16,13 +16,12 @@ class Socket implements SocketBase {
     _ws.listen((data) {
       var msg = new Message.fromPacket(data);
       _messageController.add(msg);
-    },
-    onDone: () {
+    }, onDone: () {
       _closeController.add(_ws);
     });
   }
 
-  void send(String messageName, [ data ]) {
+  void send(String messageName, [data]) {
     var message = new Message(messageName, data);
     _ws.add(message.toPacket());
   }

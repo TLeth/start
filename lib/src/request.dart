@@ -9,11 +9,9 @@ class Request {
 
   List header(String name) => _request.headers[name.toLowerCase()];
 
-  bool accepts(String type) =>
-      _request.headers['accept'].where((name) => name.split(',').indexOf(type) ).length > 0;
+  bool accepts(String type) => _request.headers['accept'].where((name) => name.split(',').indexOf(type)).length > 0;
 
-  bool isMime(String type) =>
-      _request.headers['content-type'].where((value) => value == type).isNotEmpty;
+  bool isMime(String type) => _request.headers['content-type'].where((value) => value == type).isNotEmpty;
 
   bool get isForwarded => _request.headers['x-forwarded-host'] != null;
 
@@ -39,19 +37,13 @@ class Request {
     if (params.containsKey(name) && params[name] != null) {
       return params[name];
     }
-    return _request.uri.queryParameters[name] != null
-         ? _request.uri.queryParameters[name]
-         : '';
+    return _request.uri.queryParameters[name] != null ? _request.uri.queryParameters[name] : '';
   }
 
-  Future<Map> payload({ Encoding enc: UTF8 }) {
+  Future<Map> payload({Encoding enc: UTF8}) {
     var completer = new Completer();
     _request.transform(const AsciiDecoder()).listen((content) {
-      final params = new Map.fromIterable(
-          content.split('&').map((kvs) => kvs.split('=')),
-          key: (kv) => Uri.decodeQueryComponent(kv[0], encoding: enc),
-          value: (kv) => Uri.decodeQueryComponent(kv[1], encoding: enc)
-      );
+      final params = new Map.fromIterable(content.split('&').map((kvs) => kvs.split('=')), key: (kv) => Uri.decodeQueryComponent(kv[0], encoding: enc), value: (kv) => Uri.decodeQueryComponent(kv[1], encoding: enc));
       completer.complete(params);
     });
     return completer.future;

@@ -16,7 +16,7 @@ class Server {
   }
 
   Future<Server> listen(String host, num port) {
-    return HttpServer.bind(host, port).then((HttpServer server){
+    return HttpServer.bind(host, port).then((HttpServer server) {
       _server = server;
       _server.listen((HttpRequest req) {
         var route = _routes.firstWhere((Route route) => route.match(req), orElse: () => null);
@@ -35,12 +35,12 @@ class Server {
     });
   }
 
-  void static(path, { listing: true, links: true, jail: true }) {
+  void static(path, {listing: true, links: true, jail: true}) {
     _staticServer = new VirtualDirectory(path)
-      ..allowDirectoryListing = listing
-      ..followLinks = links
-      ..jailRoot = jail
-      ..errorPageHandler = _send404;
+        ..allowDirectoryListing = listing
+        ..followLinks = links
+        ..jailRoot = jail
+        ..errorPageHandler = _send404;
 
     _staticServer.directoryHandler = (Directory dir, HttpRequest req) {
       var filePath = '${dir.path}${Platform.pathSeparator}index.html';
@@ -49,42 +49,42 @@ class Server {
     };
   }
 
-  Stream<Socket> ws(path, { List<String> keys } ) {
+  Stream<Socket> ws(path, {List<String> keys}) {
     var route = new Route.ws(path, keys: keys);
     _routes.add(route);
 
     return route.stream;
   }
 
-  Stream<Request> get(path, { List<String> keys }) {
+  Stream<Request> get(path, {List<String> keys}) {
     var route = new Route('get', path, keys: keys);
     _routes.add(route);
 
     return route.stream;
   }
 
-  Stream<Request> options(path, { List<String> keys }) {
+  Stream<Request> options(path, {List<String> keys}) {
     var route = new Route('options', path, keys: keys);
     _routes.add(route);
 
     return route.stream;
   }
 
-  Stream<Request> post(path, { List<String> keys }) {
+  Stream<Request> post(path, {List<String> keys}) {
     var route = new Route('post', path, keys: keys);
     _routes.add(route);
 
     return route.stream;
   }
 
-  Stream<Request> put(path, { List<String> keys }) {
+  Stream<Request> put(path, {List<String> keys}) {
     var route = new Route('put', path, keys: keys);
     _routes.add(route);
 
     return route.stream;
   }
 
-  Stream delete(path, { List<String> keys }) {
+  Stream delete(path, {List<String> keys}) {
     var route = new Route('delete', path, keys: keys);
     _routes.add(route);
 
@@ -93,7 +93,7 @@ class Server {
 
   void _send404(HttpRequest req) {
     req.response
-      ..statusCode = HttpStatus.NOT_FOUND
-      ..close();
+        ..statusCode = HttpStatus.NOT_FOUND
+        ..close();
   }
 }

@@ -19,8 +19,8 @@ class Response {
 
   Response type(String contentType) => set('Content-Type', contentType);
 
-  Response cache(String cacheType, [Map<String,String> options]) {
-    if(options == null) {
+  Response cache(String cacheType, [Map<String, String> options]) {
+    if (options == null) {
       options = {};
     }
     StringBuffer value = new StringBuffer(cacheType);
@@ -36,11 +36,8 @@ class Response {
   }
 
   Response cookie(String name, String val, [Map options]) {
-    var cookie = new Cookie(
-          Uri.encodeQueryComponent(name),
-          Uri.encodeQueryComponent(val)
-        ),
-        cookieMirror = reflect(cookie);
+    var cookie = new Cookie(Uri.encodeQueryComponent(name), Uri.encodeQueryComponent(val));
+    var cookieMirror = reflect(cookie);
 
     if (options != null) {
       options.forEach((option, value) {
@@ -53,7 +50,10 @@ class Response {
   }
 
   Response deleteCookie(String name) {
-    Map options = { 'expires': 'Thu, 01-Jan-70 00:00:01 GMT', 'path': '/' };
+    Map options = {
+      'expires': 'Thu, 01-Jan-70 00:00:01 GMT',
+      'path': '/'
+    };
     return cookie(name, '', options);
   }
 
